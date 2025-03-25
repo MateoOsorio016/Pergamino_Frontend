@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '@/components/ui/button';
-import { coffee, logOut, user } from 'lucide-react';
+import { Coffee, LogOut, User } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const { user: currentUser, logout, isAuthenticated } = useAuth();
@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
             className="flex items-center space-x-2 text-pergamino-darkTeal transition-transform hover:scale-105"
           >
             <div className="w-10 h-10 rounded-full bg-pergamino-darkTeal flex items-center justify-center text-white">
-              <coffee className="w-6 h-6" />
+              <Coffee className="w-6 h-6" />
             </div>
             <span className="text-2xl font-bold font-sumana">Pergamino</span>
           </Link>
@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
                 <div className="hidden md:flex items-center space-x-2 text-pergamino-darkTeal">
-                  <user className="w-5 h-5" />
+                  <User className="w-5 h-5" />
                   <span className="font-medium">{currentUser?.name}</span>
                 </div>
                 <Button 
@@ -92,7 +92,7 @@ const Navbar: React.FC = () => {
                   onClick={handleLogout}
                   className="flex items-center space-x-1 text-pergamino-darkTeal hover:text-pergamino-orange hover:bg-pergamino-cream"
                 >
-                  <logOut className="w-5 h-5" />
+                  <LogOut className="w-5 h-5" />
                   <span className="hidden md:inline">Logout</span>
                 </Button>
               </div>

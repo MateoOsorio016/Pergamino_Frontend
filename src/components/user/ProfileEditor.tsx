@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '../../context/AuthContext';
-import { user, mail, key, save } from 'lucide-react';
+import { User, Mail, Key, Save } from 'lucide-react';
 
 const ProfileEditor: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -83,7 +83,7 @@ const ProfileEditor: React.FC = () => {
       <Card className="shadow-md border-pergamino-darkTeal/10">
         <CardHeader>
           <div className="flex items-center space-x-2">
-            <user className="h-5 w-5 text-pergamino-darkTeal" />
+            <User className="h-5 w-5 text-pergamino-darkTeal" />
             <CardTitle className="text-xl font-sumana text-pergamino-darkTeal">
               Profile Information
             </CardTitle>
@@ -98,7 +98,7 @@ const ProfileEditor: React.FC = () => {
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-pergamino-darkTeal">Full Name</Label>
                 <div className="relative">
-                  <user className="absolute left-3 top-1/2 -translate-y-1/2 text-pergamino-darkTeal/50 h-4 w-4" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-pergamino-darkTeal/50 h-4 w-4" />
                   <Input
                     id="name"
                     name="name"
@@ -112,7 +112,7 @@ const ProfileEditor: React.FC = () => {
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-pergamino-darkTeal">Email Address</Label>
                 <div className="relative">
-                  <mail className="absolute left-3 top-1/2 -translate-y-1/2 text-pergamino-darkTeal/50 h-4 w-4" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-pergamino-darkTeal/50 h-4 w-4" />
                   <Input
                     id="email"
                     name="email"
@@ -130,7 +130,7 @@ const ProfileEditor: React.FC = () => {
                 type="submit"
                 className="bg-pergamino-darkTeal hover:bg-pergamino-teal text-white"
               >
-                <save className="h-4 w-4 mr-2" />
+                <Save className="h-4 w-4 mr-2" />
                 Save Changes
               </Button>
             </div>
@@ -141,7 +141,7 @@ const ProfileEditor: React.FC = () => {
       <Card className="shadow-md border-pergamino-darkTeal/10">
         <CardHeader>
           <div className="flex items-center space-x-2">
-            <key className="h-5 w-5 text-pergamino-darkTeal" />
+            <Key className="h-5 w-5 text-pergamino-darkTeal" />
             <CardTitle className="text-xl font-sumana text-pergamino-darkTeal">
               Change Password
             </CardTitle>

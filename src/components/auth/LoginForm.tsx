@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '../../context/AuthContext';
-import { coffee } from 'lucide-react';
+import { Coffee } from 'lucide-react';
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -54,7 +54,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     <div className="w-full max-w-md mx-auto">
       <div className="flex flex-col items-center mb-8">
         <div className="w-16 h-16 rounded-full bg-pergamino-darkTeal flex items-center justify-center text-white mb-4">
-          <coffee className="w-10 h-10" />
+          <Coffee className="w-10 h-10" />
         </div>
         <h1 className="text-3xl font-bold text-pergamino-darkTeal font-sumana">Welcome Back</h1>
         <p className="text-pergamino-darkTeal/70 mt-2">Sign in to your Pergamino account</p>

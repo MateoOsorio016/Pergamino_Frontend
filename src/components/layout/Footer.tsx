@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { coffee, instagram, facebook, twitter } from 'lucide-react';
+import { Coffee, Instagram, Facebook, Twitter } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2 text-pergamino-darkTeal">
               <div className="w-10 h-10 rounded-full bg-pergamino-darkTeal flex items-center justify-center text-white">
-                <coffee className="w-6 h-6" />
+                <Coffee className="w-6 h-6" />
               </div>
               <span className="text-2xl font-bold font-sumana">Pergamino</span>
             </Link>
@@ -20,13 +20,13 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex space-x-4 pt-4">
               <a href="#" className="text-pergamino-darkTeal hover:text-pergamino-orange transition-colors">
-                <instagram className="w-6 h-6" />
+                <Instagram className="w-6 h-6" />
               </a>
               <a href="#" className="text-pergamino-darkTeal hover:text-pergamino-orange transition-colors">
-                <facebook className="w-6 h-6" />
+                <Facebook className="w-6 h-6" />
               </a>
               <a href="#" className="text-pergamino-darkTeal hover:text-pergamino-orange transition-colors">
-                <twitter className="w-6 h-6" />
+                <Twitter className="w-6 h-6" />
               </a>
             </div>
           </div>

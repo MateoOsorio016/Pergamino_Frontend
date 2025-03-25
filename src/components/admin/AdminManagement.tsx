@@ -18,7 +18,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { User, UserRole } from '../../context/AuthContext';
 import { admins } from '../../lib/data';
-import { edit, plus, trash } from 'lucide-react';
+import { Edit, Plus, Trash } from 'lucide-react';
 
 const AdminManagement: React.FC = () => {
   const { toast } = useToast();
@@ -125,7 +125,7 @@ const AdminManagement: React.FC = () => {
             onClick={handleAddAdmin}
             className="bg-pergamino-darkTeal hover:bg-pergamino-teal text-white"
           >
-            <plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4 mr-2" />
             Add Admin
           </Button>
         </CardHeader>
@@ -163,7 +163,7 @@ const AdminManagement: React.FC = () => {
                           onClick={() => handleEditAdmin(admin)}
                           className="hover:bg-pergamino-blue/10 hover:text-pergamino-blue"
                         >
-                          <edit className="h-4 w-4" />
+                          <Edit className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
@@ -171,7 +171,7 @@ const AdminManagement: React.FC = () => {
                           onClick={() => handleDeactivateAdmin(admin)}
                           className="hover:bg-pergamino-orange/10 hover:text-pergamino-orange"
                         >
-                          <trash className="h-4 w-4" />
+                          <Trash className="h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>

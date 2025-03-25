@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { coffee, coins, check, shoppingCart } from 'lucide-react';
+import { Coffee, Coins, Check, ShoppingCart } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { pointsTransactions } from '../../lib/data';
 
@@ -49,7 +49,7 @@ const PointsTracker: React.FC = () => {
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="w-12 h-12 rounded-full bg-pergamino-teal/10 flex items-center justify-center">
-                <coins className="h-6 w-6 text-pergamino-teal" />
+                <Coins className="h-6 w-6 text-pergamino-teal" />
               </div>
               <div className="text-3xl font-bold text-pergamino-darkTeal">
                 {user?.points || 0}
@@ -65,7 +65,7 @@ const PointsTracker: React.FC = () => {
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="w-12 h-12 rounded-full bg-pergamino-orange/10 flex items-center justify-center">
-                <coffee className="h-6 w-6 text-pergamino-orange" />
+                <Coffee className="h-6 w-6 text-pergamino-orange" />
               </div>
               <div className="text-3xl font-bold text-pergamino-darkTeal">
                 {totalEarned}
@@ -81,7 +81,7 @@ const PointsTracker: React.FC = () => {
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="w-12 h-12 rounded-full bg-pergamino-blue/10 flex items-center justify-center">
-                <shoppingCart className="h-6 w-6 text-pergamino-blue" />
+                <ShoppingCart className="h-6 w-6 text-pergamino-blue" />
               </div>
               <div className="text-3xl font-bold text-pergamino-darkTeal">
                 {user?.pointsSpent || 0}
@@ -138,9 +138,9 @@ const PointsTracker: React.FC = () => {
                               : 'bg-pergamino-orange/10 text-pergamino-orange'
                           }`}>
                             {transaction.type === 'earned' ? (
-                              <coffee className="h-4 w-4" />
+                              <Coffee className="h-4 w-4" />
                             ) : (
-                              <check className="h-4 w-4" />
+                              <Check className="h-4 w-4" />
                             )}
                           </div>
                           <div>
@@ -181,7 +181,7 @@ const PointsTracker: React.FC = () => {
                       >
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 rounded-full bg-pergamino-teal/10 flex items-center justify-center text-pergamino-teal">
-                            <coffee className="h-4 w-4" />
+                            <Coffee className="h-4 w-4" />
                           </div>
                           <div>
                             <div className="font-medium text-pergamino-darkTeal">
@@ -217,7 +217,7 @@ const PointsTracker: React.FC = () => {
                       >
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 rounded-full bg-pergamino-orange/10 flex items-center justify-center text-pergamino-orange">
-                            <check className="h-4 w-4" />
+                            <Check className="h-4 w-4" />
                           </div>
                           <div>
                             <div className="font-medium text-pergamino-darkTeal">

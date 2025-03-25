@@ -14,7 +14,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, coffee, shoppingBag } from 'lucide-react';
+import { Calendar, Coffee, ShoppingBag } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { purchases } from '../../lib/data';
 
@@ -39,7 +39,7 @@ const PurchaseHistory: React.FC = () => {
     <Card className="shadow-md border-pergamino-darkTeal/10">
       <CardHeader>
         <div className="flex items-center space-x-2">
-          <shoppingBag className="h-5 w-5 text-pergamino-orange" />
+          <ShoppingBag className="h-5 w-5 text-pergamino-orange" />
           <CardTitle className="text-xl font-sumana text-pergamino-darkTeal">
             Purchase History
           </CardTitle>
@@ -61,7 +61,7 @@ const PurchaseHistory: React.FC = () => {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 cursor-pointer">
                       <div className="flex items-center space-x-4">
                         <div className="w-10 h-10 rounded-full bg-pergamino-cream flex items-center justify-center">
-                          <coffee className="h-5 w-5 text-pergamino-darkTeal" />
+                          <Coffee className="h-5 w-5 text-pergamino-darkTeal" />
                         </div>
                         <div>
                           <h3 className="font-medium text-pergamino-darkTeal">
@@ -117,7 +117,7 @@ const PurchaseHistory: React.FC = () => {
           </div>
         ) : (
           <div className="text-center py-8 text-pergamino-darkTeal/70">
-            <shoppingBag className="h-16 w-16 mx-auto text-pergamino-darkTeal/30 mb-4" />
+            <ShoppingBag className="h-16 w-16 mx-auto text-pergamino-darkTeal/30 mb-4" />
             <p className="text-lg font-medium">No purchase history yet</p>
             <p className="mt-1">Your purchases will appear here once you make them.</p>
           </div>
