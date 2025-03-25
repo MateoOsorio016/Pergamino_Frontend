@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import {
   Table,
@@ -37,7 +36,7 @@ const ITEMS_PER_PAGE = 5;
 const UserTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [pointsFilter, setPointsFilter] = useState<string>('');
+  const [pointsFilter, setPointsFilter] = useState<string>('all');
   const [sortConfig, setSortConfig] = useState<{
     key: keyof User | null;
     direction: 'asc' | 'desc';
@@ -59,7 +58,7 @@ const UserTable = () => {
     }
     
     // Apply points filter
-    if (pointsFilter) {
+    if (pointsFilter && pointsFilter !== 'all') {
       if (pointsFilter === 'high') {
         filtered = filtered.filter(user => user.points >= 200);
       } else if (pointsFilter === 'medium') {
@@ -145,7 +144,7 @@ const UserTable = () => {
                   </div>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Points</SelectItem>
+                  <SelectItem value="all">All Points</SelectItem>
                   <SelectItem value="high">High (200+)</SelectItem>
                   <SelectItem value="medium">Medium (100-199)</SelectItem>
                   <SelectItem value="low">Low (0-99)</SelectItem>
