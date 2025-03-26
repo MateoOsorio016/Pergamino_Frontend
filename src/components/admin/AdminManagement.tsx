@@ -1,17 +1,9 @@
 
 import { useState } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -19,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { User, UserRole } from '../../context/AuthContext';
 import { admins } from '../../lib/data';
 import { Edit, Plus, Trash } from 'lucide-react';
+import { DataTable, Column } from '../shared/DataTable';
 
 const AdminManagement: React.FC = () => {
   const { toast } = useToast();
@@ -114,13 +107,57 @@ const AdminManagement: React.FC = () => {
     });
   };
 
+  // Define table columns
+  const columns: Column<User>[] = [
+    {
+      key: 'name',
+      header: 'Name',
+      cell: (admin) => <span className="font-medium">{admin.name}</span>,
+      sortable: true
+    },
+    {
+      key: 'email',
+      header: 'Email',
+      cell: (admin) => admin.email,
+      sortable: true
+    },
+    {
+      key: 'role',
+      header: 'Role',
+      cell: (admin) => <span className="capitalize">{admin.role}</span>
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      cell: () => (
+        <Badge className="bg-pergamino-blue text-white">
+          Active
+        </Badge>
+      ),
+      align: 'right'
+    }
+  ];
+
+  // Search handler
+  const handleSearch = (searchTerm: string, data: User[]): User[] => {
+    const searchLower = searchTerm.toLowerCase();
+    return data.filter(
+      admin => 
+        admin.name.toLowerCase().includes(searchLower) || 
+        admin.email.toLowerCase().includes(searchLower)
+    );
+  };
+
   return (
     <div className="space-y-6">
-      <Card className="shadow-md border-pergamino-darkTeal/10">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle className="text-2xl font-sumana text-pergamino-darkTeal">
-            Administrator Management
-          </CardTitle>
+      <DataTable 
+        title="Administrator Management"
+        data={adminsList}
+        columns={columns}
+        keyExtractor={(admin) => admin.id}
+        searchable={true}
+        onSearch={handleSearch}
+        renderTopActions={() => (
           <Button 
             onClick={handleAddAdmin}
             className="bg-pergamino-darkTeal hover:bg-pergamino-teal text-white"
@@ -128,60 +165,28 @@ const AdminManagement: React.FC = () => {
             <Plus className="h-4 w-4 mr-2" />
             Add Admin
           </Button>
-        </CardHeader>
-        <CardContent>
-          <div className="rounded-md border border-pergamino-teal/20 overflow-hidden">
-            <Table>
-              <TableHeader className="bg-pergamino-cream/50">
-                <TableRow>
-                  <TableHead className="w-[200px]">Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead className="text-right">Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {adminsList.map((admin) => (
-                  <TableRow 
-                    key={admin.id}
-                    className="hover:bg-pergamino-cream/20 transition-colors"
-                  >
-                    <TableCell className="font-medium">{admin.name}</TableCell>
-                    <TableCell>{admin.email}</TableCell>
-                    <TableCell className="capitalize">{admin.role}</TableCell>
-                    <TableCell className="text-right">
-                      <Badge className="bg-pergamino-blue text-white">
-                        Active
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEditAdmin(admin)}
-                          className="hover:bg-pergamino-blue/10 hover:text-pergamino-blue"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeactivateAdmin(admin)}
-                          className="hover:bg-pergamino-orange/10 hover:text-pergamino-orange"
-                        >
-                          <Trash className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+        )}
+        renderActions={(admin) => (
+          <div className="flex justify-end space-x-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleEditAdmin(admin)}
+              className="hover:bg-pergamino-blue/10 hover:text-pergamino-blue"
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDeactivateAdmin(admin)}
+              className="hover:bg-pergamino-orange/10 hover:text-pergamino-orange"
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
           </div>
-        </CardContent>
-      </Card>
+        )}
+      />
 
       {/* Add Admin Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

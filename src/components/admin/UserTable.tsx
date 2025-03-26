@@ -1,105 +1,95 @@
-import { useState, useMemo } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
+
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Search,
-  Eye,
-  Filter,
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Eye } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { User } from '../../context/AuthContext';
 import { users } from '../../lib/data';
-
-const ITEMS_PER_PAGE = 5;
+import { DataTable, Column, FilterOption } from '../shared/DataTable';
 
 const UserTable = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [pointsFilter, setPointsFilter] = useState<string>('all');
-  const [sortConfig, setSortConfig] = useState<{
-    key: keyof User | null;
-    direction: 'asc' | 'desc';
-  }>({ key: null, direction: 'asc' });
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  // Apply filters, sorting, and pagination
-  const filteredUsers = useMemo(() => {
-    let filtered = [...users].filter(user => user.role === 'user');
-    
-    // Apply search filter
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(
-        user => 
-          user.name.toLowerCase().includes(searchLower) || 
-          user.email.toLowerCase().includes(searchLower)
-      );
+  // Define table columns
+  const columns: Column<User>[] = [
+    {
+      key: 'name',
+      header: 'Name',
+      cell: (user) => <span className="font-medium">{user.name}</span>,
+      sortable: true
+    },
+    {
+      key: 'email',
+      header: 'Email',
+      cell: (user) => user.email,
+      sortable: true
+    },
+    {
+      key: 'points',
+      header: 'Available Points',
+      cell: (user) => (
+        <Badge variant="outline" className="bg-pergamino-teal/10 text-pergamino-darkTeal">
+          {user.points}
+        </Badge>
+      ),
+      sortable: true,
+      align: 'right'
+    },
+    {
+      key: 'pointsSpent',
+      header: 'Points Spent',
+      cell: (user) => (
+        <Badge variant="outline" className="bg-pergamino-orange/10 text-pergamino-orange">
+          {user.pointsSpent}
+        </Badge>
+      ),
+      sortable: true,
+      align: 'right'
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      cell: () => (
+        <Badge className="bg-pergamino-blue text-white">
+          Active
+        </Badge>
+      ),
+      align: 'right'
     }
-    
-    // Apply points filter
-    if (pointsFilter && pointsFilter !== 'all') {
-      if (pointsFilter === 'high') {
-        filtered = filtered.filter(user => user.points >= 200);
-      } else if (pointsFilter === 'medium') {
-        filtered = filtered.filter(user => user.points >= 100 && user.points < 200);
-      } else if (pointsFilter === 'low') {
-        filtered = filtered.filter(user => user.points < 100);
-      }
-    }
-    
-    // Apply sorting
-    if (sortConfig.key) {
-      filtered.sort((a, b) => {
-        if (a[sortConfig.key!] < b[sortConfig.key!]) {
-          return sortConfig.direction === 'asc' ? -1 : 1;
-        }
-        if (a[sortConfig.key!] > b[sortConfig.key!]) {
-          return sortConfig.direction === 'asc' ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-    
-    return filtered;
-  }, [users, searchTerm, pointsFilter, sortConfig]);
+  ];
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
-  const paginatedUsers = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredUsers.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredUsers, currentPage]);
+  // Define filter options
+  const filterOptions: FilterOption[] = [
+    { value: 'all', label: 'All Points' },
+    { value: 'high', label: 'High (200+)' },
+    { value: 'medium', label: 'Medium (100-199)' },
+    { value: 'low', label: 'Low (0-99)' }
+  ];
 
-  // Sorting handler
-  const handleSort = (key: keyof User) => {
-    setSortConfig(prevSortConfig => ({
-      key,
-      direction:
-        prevSortConfig.key === key && prevSortConfig.direction === 'asc'
-          ? 'desc'
-          : 'asc',
-    }));
+  // Filter handler
+  const handleFilter = (value: string, data: User[]): User[] => {
+    if (value === 'all') return data;
+    
+    if (value === 'high') {
+      return data.filter(user => user.points >= 200);
+    } else if (value === 'medium') {
+      return data.filter(user => user.points >= 100 && user.points < 200);
+    } else if (value === 'low') {
+      return data.filter(user => user.points < 100);
+    }
+    
+    return data;
+  };
+
+  // Search handler
+  const handleSearch = (searchTerm: string, data: User[]): User[] => {
+    const searchLower = searchTerm.toLowerCase();
+    return data.filter(
+      user => 
+        user.name.toLowerCase().includes(searchLower) || 
+        user.email.toLowerCase().includes(searchLower)
+    );
   };
 
   // View user details
@@ -107,203 +97,35 @@ const UserTable = () => {
     setSelectedUser(user);
   };
 
-  // Pagination handlers
-  const goToPage = (page: number) => {
-    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
-  };
+  // Only include users (not admins)
+  const userData = users.filter(user => user.role === 'user');
 
   return (
-    <div className="space-y-6">
-      <Card className="shadow-md border-pergamino-darkTeal/10">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-sumana text-pergamino-darkTeal">
-            User Management
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-pergamino-darkTeal/50 h-4 w-4" />
-              <Input
-                placeholder="Search users..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-pergamino-teal/30 focus:border-pergamino-teal"
-              />
-            </div>
-            
-            <div className="w-full md:w-48">
-              <Select
-                value={pointsFilter}
-                onValueChange={setPointsFilter}
-              >
-                <SelectTrigger className="border-pergamino-teal/30">
-                  <div className="flex items-center gap-2">
-                    <Filter className="h-4 w-4 text-pergamino-darkTeal/70" />
-                    <SelectValue placeholder="Filter Points" />
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Points</SelectItem>
-                  <SelectItem value="high">High (200+)</SelectItem>
-                  <SelectItem value="medium">Medium (100-199)</SelectItem>
-                  <SelectItem value="low">Low (0-99)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="rounded-md border border-pergamino-teal/20 overflow-hidden">
-            <Table>
-              <TableHeader className="bg-pergamino-cream/50">
-                <TableRow>
-                  <TableHead 
-                    className="w-[200px] cursor-pointer hover:text-pergamino-blue"
-                    onClick={() => handleSort('name')}
-                  >
-                    Name
-                    {sortConfig.key === 'name' && (
-                      <span className="ml-1">
-                        {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </TableHead>
-                  <TableHead 
-                    className="cursor-pointer hover:text-pergamino-blue"
-                    onClick={() => handleSort('email')}
-                  >
-                    Email
-                    {sortConfig.key === 'email' && (
-                      <span className="ml-1">
-                        {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </TableHead>
-                  <TableHead 
-                    className="text-right cursor-pointer hover:text-pergamino-blue"
-                    onClick={() => handleSort('points')}
-                  >
-                    Available Points
-                    {sortConfig.key === 'points' && (
-                      <span className="ml-1">
-                        {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </TableHead>
-                  <TableHead 
-                    className="text-right cursor-pointer hover:text-pergamino-blue"
-                    onClick={() => handleSort('pointsSpent')}
-                  >
-                    Points Spent
-                    {sortConfig.key === 'pointsSpent' && (
-                      <span className="ml-1">
-                        {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </TableHead>
-                  <TableHead className="text-right">Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {paginatedUsers.length > 0 ? (
-                  paginatedUsers.map((user) => (
-                    <TableRow 
-                      key={user.id}
-                      className="hover:bg-pergamino-cream/20 transition-colors"
-                    >
-                      <TableCell className="font-medium">{user.name}</TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell className="text-right">
-                        <Badge variant="outline" className="bg-pergamino-teal/10 text-pergamino-darkTeal">
-                          {user.points}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Badge variant="outline" className="bg-pergamino-orange/10 text-pergamino-orange">
-                          {user.pointsSpent}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Badge className="bg-pergamino-blue text-white">
-                          Active
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleViewUser(user)}
-                          className="hover:bg-pergamino-blue/10 hover:text-pergamino-blue"
-                        >
-                          <Eye className="h-4 w-4 mr-2" />
-                          View
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center h-24 text-muted-foreground">
-                      No users found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {/* Pagination */}
-          {filteredUsers.length > 0 && (
-            <div className="flex items-center justify-between mt-4">
-              <div className="text-sm text-pergamino-darkTeal/70">
-                Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, filteredUsers.length)} of {filteredUsers.length} users
-              </div>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => goToPage(1)}
-                  disabled={currentPage === 1}
-                  className="h-8 w-8 border-pergamino-teal/30"
-                >
-                  <ChevronsLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="h-8 w-8 border-pergamino-teal/30"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm text-pergamino-darkTeal">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="h-8 w-8 border-pergamino-teal/30"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => goToPage(totalPages)}
-                  disabled={currentPage === totalPages}
-                  className="h-8 w-8 border-pergamino-teal/30"
-                >
-                  <ChevronsRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+    <>
+      <DataTable 
+        title="User Management"
+        data={userData}
+        columns={columns}
+        keyExtractor={(user) => user.id}
+        filterOptions={{
+          placeholder: "Filter Points",
+          options: filterOptions,
+          onFilter: handleFilter
+        }}
+        searchable={true}
+        onSearch={handleSearch}
+        renderActions={(user) => (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleViewUser(user)}
+            className="hover:bg-pergamino-blue/10 hover:text-pergamino-blue"
+          >
+            <Eye className="h-4 w-4 mr-2" />
+            View
+          </Button>
+        )}
+      />
 
       {/* User Details Dialog */}
       <Dialog open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
@@ -368,7 +190,7 @@ const UserTable = () => {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 };
 
