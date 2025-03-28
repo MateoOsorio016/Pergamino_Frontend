@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserDashboard from "./pages/UserDashboard";
 import NotFound from "./pages/NotFound";
+import FormModalExample from "./components/examples/FormModalExample";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/admin/admins" element={<AdminDashboard />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/profile" element={<UserDashboard />} />
+            <Route path="/examples/form-modal" element={<FormModalExample />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
